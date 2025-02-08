@@ -16,8 +16,7 @@ from bs4 import BeautifulSoup
 
 
 # Reading the data inside the xml
-# file to a variable under the name
-# data
+# file to a variable under the name data
 def load_xml(path):
 
     with open(path, 'r') as f:
