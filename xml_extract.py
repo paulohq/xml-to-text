@@ -4,10 +4,11 @@
 import sys
 import os
 from bs4 import BeautifulSoup
-import xml.etree.ElementTree as ET
 import xml.dom.minidom as md
 
-import xml.etree.ElementTree as ET
+#import xml.etree.ElementTree as ET
+from lxml import etree as ET
+
 XMLexample_stored_in_a_string ='''<?xml version ="1.0"?>
 <States>
     <state name ="TELANGANA">
@@ -47,7 +48,7 @@ def load_xml(path):
         # Passing the stored data inside
         # the beautifulsoup parser, storing
         # the returned object
-        Bs_data = BeautifulSoup(data, "xml")
+        Bs_data = BeautifulSoup(data, "lxml-xml")
 
         # Finding all instances of tag
         # `unique`
@@ -85,6 +86,21 @@ def extract():
         name = state.get('name')
         print(name, rank)
 
+def insert_update_AR(file):
+    tree = ET.parse(file)
+    root = tree.getroot()
+
+    #mes = root.xpath("/dezembro")
+    #item = root.xpath("//escrituracao/dezembro/item")
+    for item in root[2][12].iter('item'):
+        item.set('valor', '100')
+        #item.set('valor', str(float(item.attrib.values()[6]) + 10))
+
+    for month in root.iter('dezembro'):
+        print(month.attrib.items())
+        print(month.attrib.values())
+
+    tree.write('xml/AR-output.xml')
 def insert_update():
     # https://www.geeksforgeeks.org/modify-xml-files-with-python/
     mytree = ET.parse('xml/document.xml')
@@ -159,10 +175,11 @@ def parse_xml():
         print(player.getAttribute("name"))
 
 def main(file):
+    insert_update_AR(file)
     #load_xml(file)
-    extract()
-    insert_update()
-    parse_xml()
+    #extract()
+    #insert_update()
+    #parse_xml()
 
 if __name__ == "__main__":
     main(sys.argv[1])
