@@ -90,6 +90,22 @@ def insert_update_AR(file):
     tree = ET.parse(file)
     root = tree.getroot()
 
+    # itera sobre os elementos do root.
+    for child in root:
+        # se a tag do nó for igual a escrituracao
+        if child.tag == 'escrituracao':
+            #itera sobre os filhos do nó escrituração.
+            for c in child.getchildren():
+                if c.tag != 'colecaoPlanoContas':
+                    print(c.attrib)
+                    for l in c.iterchildren():
+                        print(l)
+            print('aqui')
+        print(child.tag)
+
+    for el in root.iter():
+        print(el.tag)
+
     #mes = root.xpath("/dezembro")
     #item = root.xpath("//escrituracao/dezembro/item")
     for item in root[2][12].iter('item'):
@@ -99,7 +115,8 @@ def insert_update_AR(file):
     element = ET.SubElement(root[2][12], 'test_item')
     element.set('classificacaoConta', '1234')
     element.set('codTipoContaSelecao', '456789')
-
+    t = element.getroottree()
+    print(t.getroot().tag)
     for month in root.iter('dezembro'):
         print(month.attrib.items())
         print(month.attrib.values())
