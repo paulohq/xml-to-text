@@ -94,7 +94,11 @@ def insert_update_AR(file):
     #item = root.xpath("//escrituracao/dezembro/item")
     for item in root[2][12].iter('item'):
         item.set('valor', '100')
-        #item.set('valor', str(float(item.attrib.values()[6]) + 10))
+        item.set('valor', str(float(item.attrib.values()[6]) + 10))
+
+    element = ET.SubElement(root[2][12], 'test_item')
+    element.set('classificacaoConta', '1234')
+    element.set('codTipoContaSelecao', '456789')
 
     for month in root.iter('dezembro'):
         print(month.attrib.items())
