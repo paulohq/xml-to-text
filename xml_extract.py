@@ -106,15 +106,40 @@ def insert_update_AR(file):
     for el in root.iter():
         print(el.tag)
 
+    # itera sobre o terceiro elemento abaixo do nó root (escrituracao).
+    for child in root[2]:
+        # se a tag do nó for diferente de colecaoPlanoContas (tags dos meses).
+        if child.tag != 'colecaoPlanoContas':
+            # soma valor ao saldo do item.
+            vl = float(child.attrib.values()[1].replace(',','.')) + float("10,80".replace(',','.'))
+            # converte para decimal com dois dígitos.
+            vl1 = f'{vl:,.2f}'
+            # substitui "." por "," e grava no campo saldo do item.
+            child.set('saldo', vl1.replace('.',','))
+
     #mes = root.xpath("/dezembro")
     #item = root.xpath("//escrituracao/dezembro/item")
+    # itera sobre os itens do mês 12
     for item in root[2][12].iter('item'):
-        item.set('valor', '100')
-        item.set('valor', str(float(item.attrib.values()[6]) + 10))
+        item.set('valor', '100,30')
+        # soma valor ao item.
+        vl = float(item.attrib.values()[6].replace(',','.')) + float("10,80".replace(',','.'))
+        # converte para decimal com dois dígitos.
+        vl1 = f'{vl:,.2f}'
+        # substitui "." por "," e grava no valor do item.
+        item.set('valor', vl1.replace('.',','))
 
-    element = ET.SubElement(root[2][12], 'test_item')
-    element.set('classificacaoConta', '1234')
-    element.set('codTipoContaSelecao', '456789')
+    # adiciona nó item no mês 12.
+    element = ET.SubElement(root[2][12], 'item')
+    # adiciona as tags no elemento adicionado acima.
+    element.set('classificacaoConta', '')
+    element.set('codTipoContaSelecao', '2.23.004')
+    element.set('data', '14/03/2025')
+    element.set('historico', 'COMPRA DE COMBUSTIVEL DA CIA BRASILEIRA DE DISTRIBUICAO CNPJ 47.508.411/0786-94 NF 729057 SE 302')
+    element.set('nomeAbaConta', "DEZ")
+    element.set('pais', "105")
+    element.set('valor', "120,53")
+
     t = element.getroottree()
     print(t.getroot().tag)
     for month in root.iter('dezembro'):
